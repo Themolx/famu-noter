@@ -1,0 +1,120 @@
+{
+  "name": "famu-noter",
+  "displayName": "FAMU Noter",
+  "description": "Note-taking extension for FAMU school - organize markdown notes by subject",
+  "version": "0.3.0",
+  "publisher": "martintomek",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "famu-noter",
+          "title": "FAMU Noter",
+          "icon": "$(notebook)"
+        }
+      ]
+    },
+    "views": {
+      "famu-noter": [
+        {
+          "id": "famuNoterSubjects",
+          "name": "Subjects"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "famuNoter.newNote",
+        "title": "FAMU Noter: New Note",
+        "icon": "$(add)"
+      },
+      {
+        "command": "famuNoter.newSubject",
+        "title": "FAMU Noter: New Subject"
+      },
+      {
+        "command": "famuNoter.openNote",
+        "title": "FAMU Noter: Open Note"
+      },
+      {
+        "command": "famuNoter.renameSubject",
+        "title": "FAMU Noter: Rename Subject"
+      },
+      {
+        "command": "famuNoter.deleteNote",
+        "title": "Delete Note"
+      },
+      {
+        "command": "famuNoter.setNotesFolder",
+        "title": "FAMU Noter: Set Notes Folder"
+      },
+      {
+        "command": "famuNoter.todayNote",
+        "title": "FAMU Noter: Today's Note"
+      },
+      {
+        "command": "famuNoter.searchNotes",
+        "title": "FAMU Noter: Search Notes"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "famuNoter.newNote",
+          "when": "view == famuNoterSubjects",
+          "group": "navigation"
+        },
+        {
+          "command": "famuNoter.newSubject",
+          "when": "view == famuNoterSubjects"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "famuNoter.newNote",
+          "when": "view == famuNoterSubjects && viewItem == subject",
+          "group": "inline"
+        },
+        {
+          "command": "famuNoter.renameSubject",
+          "when": "view == famuNoterSubjects && viewItem == subject"
+        },
+        {
+          "command": "famuNoter.deleteNote",
+          "when": "view == famuNoterSubjects && viewItem == note"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "FAMU Noter",
+      "properties": {
+        "famuNoter.notesFolder": {
+          "type": "string",
+          "default": "/Users/martintomek/Library/Mobile Documents/com~apple~CloudDocs/FAMU/FAMU/semeter_one/markdown_files",
+          "description": "Path to notes folder. Absolute path (e.g. /Users/you/notes) or relative to workspace root."
+        },
+        "famuNoter.subjects": {
+          "type": "object",
+          "default": {},
+          "description": "Subject prefix to full name mapping (e.g. {\"av\": \"Audiovize\", \"ddf\": \"Dejiny dokumentarniho filmu\"})"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "npx @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.70.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}

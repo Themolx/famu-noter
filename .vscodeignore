@@ -1,0 +1,8 @@
+src/**
+node_modules/**
+.vscode/**
+notes/**
+tsconfig.json
+*.ts
+*.md
+!out/**
