@@ -2,7 +2,7 @@
   "name": "famu-noter",
   "displayName": "FAMU Noter",
   "description": "Note-taking extension for FAMU school - organize markdown notes by subject",
-  "version": "0.4.0",
+  "version": "0.3.0",
   "publisher": "martintomek",
   "engines": {
     "vscode": "^1.70.0"
@@ -61,18 +61,6 @@
       {
         "command": "famuNoter.searchNotes",
         "title": "FAMU Noter: Search Notes"
-      },
-      {
-        "command": "famuNoter.timeline",
-        "title": "FAMU Noter: Semester Timeline"
-      },
-      {
-        "command": "famuNoter.missingLectures",
-        "title": "FAMU Noter: Missing Lectures"
-      },
-      {
-        "command": "famuNoter.gitBackupNow",
-        "title": "FAMU Noter: Backup Notes (Git)"
       }
     ],
     "menus": {
@@ -84,14 +72,6 @@
         },
         {
           "command": "famuNoter.newSubject",
-          "when": "view == famuNoterSubjects"
-        },
-        {
-          "command": "famuNoter.timeline",
-          "when": "view == famuNoterSubjects"
-        },
-        {
-          "command": "famuNoter.missingLectures",
           "when": "view == famuNoterSubjects"
         }
       ],
