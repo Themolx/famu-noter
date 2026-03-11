@@ -15,6 +15,7 @@ export interface SubjectInfo {
   displayName: string;
   notes: NoteInfo[];
   nextNumber: number;
+  missingNumbers: number[];
 }
 
 // Known FAMU subject mappings - user can override via settings
@@ -123,6 +124,7 @@ export function scanNotesDirectory(notesDir: string): Map<string, SubjectInfo> {
             displayName: allSubjectNames[info.prefix] || info.prefix.toUpperCase(),
             notes: [],
             nextNumber: 1,
+            missingNumbers: [],
           });
         }
 
@@ -151,6 +153,7 @@ export function scanNotesDirectory(notesDir: string): Map<string, SubjectInfo> {
                 displayName: allSubjectNames[info.prefix] || info.prefix.toUpperCase(),
                 notes: [],
                 nextNumber: 1,
+                missingNumbers: [],
               });
             }
 
@@ -165,9 +168,21 @@ export function scanNotesDirectory(notesDir: string): Map<string, SubjectInfo> {
     }
   }
 
-  // Sort notes within each subject by number
+  // Sort notes within each subject by number and find gaps
   for (const subject of subjects.values()) {
     subject.notes.sort((a, b) => a.number - b.number);
+
+    // Find missing lecture numbers (gaps in sequence)
+    const numbered = subject.notes.filter((n) => n.number > 0);
+    if (numbered.length >= 2) {
+      const max = numbered[numbered.length - 1].number;
+      const existing = new Set(numbered.map((n) => n.number));
+      for (let i = 1; i <= max; i++) {
+        if (!existing.has(i)) {
+          subject.missingNumbers.push(i);
+        }
+      }
+    }
   }
 
   return subjects;

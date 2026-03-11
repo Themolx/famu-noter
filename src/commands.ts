@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { NotesTreeProvider, SubjectItem } from './treeProvider';
 import { getNotesFolder } from './subjects';
+import { createTimelinePanel } from './timeline';
 
 function ensureNotesFolder(): string | undefined {
   const notesDir = getNotesFolder();
@@ -303,6 +304,43 @@ export function registerCommands(
       }
 
       treeProvider.refresh();
+    })
+  );
+
+  // Semester Timeline webview
+  context.subscriptions.push(
+    vscode.commands.registerCommand('famuNoter.timeline', () => {
+      createTimelinePanel(context);
+    })
+  );
+
+  // Missing Lectures - show quick summary
+  context.subscriptions.push(
+    vscode.commands.registerCommand('famuNoter.missingLectures', async () => {
+      treeProvider.refresh();
+      const subjects = treeProvider.getSubjects();
+
+      const lines: string[] = [];
+      for (const [, subject] of subjects) {
+        if (subject.missingNumbers.length > 0) {
+          lines.push(
+            `${subject.displayName}: missing #${subject.missingNumbers.join(', #')}`
+          );
+        }
+      }
+
+      if (lines.length === 0) {
+        vscode.window.showInformationMessage('No missing lectures detected!');
+      } else {
+        const msg = lines.join('\n');
+        const action = await vscode.window.showWarningMessage(
+          `Missing lectures found:\n${msg}`,
+          'Show Timeline'
+        );
+        if (action === 'Show Timeline') {
+          createTimelinePanel(context);
+        }
+      }
     })
   );
 

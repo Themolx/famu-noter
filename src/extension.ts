@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { NotesTreeProvider } from './treeProvider';
 import { registerCommands } from './commands';
+import { setupGitBackup } from './gitBackup';
 
 export function activate(context: vscode.ExtensionContext) {
   const treeProvider = new NotesTreeProvider();
@@ -14,6 +15,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register all commands
   registerCommands(context, treeProvider);
+
+  // Setup git auto-backup
+  setupGitBackup(context);
 
   // Initial scan
   treeProvider.refresh();
